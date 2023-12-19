@@ -4,7 +4,7 @@ import Image from 'react-bootstrap/Image';
 function Loginleft() {
   return (
     <div>
-        <Image style={{height:'auto',width:'100%'}} src= {bgLogin} fluid alt='Images'/>
+        <Image style={{height:'100vh',width:'100%'}} src= {bgLogin} fluid alt='Images'/>
     </div>  
   )
 }

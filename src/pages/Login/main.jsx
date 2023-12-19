@@ -3,12 +3,7 @@ import {Row, Col,} from "react-bootstrap";
 import './login.scss';
 import Loginleft from "./Components/loginleft";
 import Loginright from "./Components/loginright";
-
-
-
 const Login = () => {
-  
-
     return (
         <div className="login-container">
         <Row className="landing">

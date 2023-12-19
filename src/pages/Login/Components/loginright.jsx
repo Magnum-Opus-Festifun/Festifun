@@ -1,73 +1,144 @@
-
-import { Button, Form } from "react-bootstrap";
-
-import { Person, LockFill, Google, Facebook, Apple } from "react-bootstrap-icons";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+// Import statements
 import React, { useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
+import { Envelope, LockFill } from 'react-bootstrap-icons';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-
-
+// Login component
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [loginData, setLoginData] = useState({
+    email: '',
+    password: '',
+  });
 
-  const handleLogin = async (e) => {
+  const [loginStatus, setLoginStatus] = useState({
+    isSuccess: null,
+    message: '',
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch('http://localhost:4000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+  
+    // Validate that email and password are not empty
+    if (!loginData.email || !loginData.password) {
+      setLoginStatus({
+        isSuccess: false,
+        message: 'Please fill in both email and password.',
       });
-
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Server response is not in JSON format');
-      }
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log('Login successful:', data);
-        // Lakukan navigasi atau tindakan lain setelah login berhasil
-      } else {
-        console.error('Login failed:', data);
-        setError('Invalid email or password'); // Set pesan kesalahan
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://localhost:4000/login', loginData);
+  
+      setLoginStatus({
+        isSuccess: true,
+        message: response.data.message,
+      });
+  
+      // Redirect ke halaman sesuai peran
+      const userRole = response.data.data.role;
+      if (userRole === 'user') {
+        navigate('/user-page');
+      } else if (userRole === 'eo') {
+        navigate('/eo-page');
       }
     } catch (error) {
-      console.error('Error during login:', error.message);
-      setError('Internal server error'); // Set pesan kesalahan
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 401) {
+          setLoginStatus({
+            isSuccess: false,
+            message: 'Email atau password salah.',
+          });
+        } else if (status === 404) {
+          setLoginStatus({
+            isSuccess: false,
+            message: 'Email belum terdaftar.',
+          });
+        } else {
+          setLoginStatus({
+            isSuccess: false,
+            message: 'Terjadi kesalahan. Silakan coba lagi.',
+          });
+        }
+      } else if (error.request) {
+        setLoginStatus({
+          isSuccess: false,
+          message: 'Tidak ada respons dari server. Silakan coba lagi.',
+        });
+      } else {
+        setLoginStatus({
+          isSuccess: false,
+          message: 'Terjadi kesalahan. Silakan coba lagi.',
+        });
+      }
     }
   };
+  
+
+  
 
   return (
     <>
-      <div className="login-container">
-        <img
-          src="https://raw.githubusercontent.com/Magnum-Opus-Festifun/punyabima/d3f45d3e38e2ff56a54fe071a65802c96fffaaab/aset/logo%20biru.png"
-          height="50"
-          alt="Navbar Logo"
-        />
-        <form onSubmit={handleLogin} className="login-form">
-          <label>
-            Email:
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </label>
-          <label>
-            Password:
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          <button type="submit">Login</button>
-        </form>
-        {error && <div className="error-alert">{error}</div>} {/* Tampilkan alert jika ada pesan kesalahan */}
-      </div>
+      <img
+        src="https://raw.githubusercontent.com/Magnum-Opus-Festifun/punyabima/d3f45d3e38e2ff56a54fe071a65802c96fffaaab/aset/logo%20biru.png"
+        height="50"
+        style={{ marginLeft: "30%", marginTop: "30%", marginBottom: "0%" }}
+        alt="Navbar Logo"
+      />
+      <Form style={{ width: "80%", height: "100vh", marginLeft: "10%", marginTop: "10%" }} onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label><Envelope /> Email</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Email/username"
+            name="email"
+            value={loginData.email}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label><LockFill />Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={loginData.password}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <div className="d-grid gap-2">
+          <Button variant="primary" size="lg" type="submit">
+            Login
+          </Button>
+        </div><br />
+        
+        {loginStatus.isSuccess !== null && (
+          <Alert variant={loginStatus.isSuccess ? 'success' : 'danger'} className="mt-3">
+            {loginStatus.message}
+          </Alert>
+        )}
+
+        <p>Belum punya akun? <Link to='/register'>Register</Link></p>
+        {/* <div className="mt-5">
+          <p>Atau lanjutkan melalui:</p>
+          <div className="ms-auto mt-5" >
+           
+          </div>
+        </div> */}
+      </Form>
     </>
   );
 }
 
-        export default Login;
+export default Login;

@@ -5,13 +5,13 @@ import Regisright from './Components/regisright';
 
 const Register = () => {
   return (
-    <div>
+    <div className='regis-container'>
         <Row className="landing">
-          <Col><Regisleft /></Col>
-
-          <Col><Regisright /></Col>
+          <Col className="login-left"><Regisleft /></Col>
+    
+          <Col className="login-right"><Regisright /></Col>
         </Row>
-        </div>
+    </div>
   );
 };
 
