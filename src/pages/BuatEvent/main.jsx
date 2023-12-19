@@ -6,6 +6,12 @@ import FileUpload from './components/fileupload';
 import Description from './components/deskripsi';
 import { Button, Alert } from 'react-bootstrap';
 
+
+
+
+
+
+
 function BuatEvent() {
   const [eventData, setEventData] = useState({
     name: '',
@@ -24,6 +30,31 @@ function BuatEvent() {
     message: '',
   });
 
+
+  const handleImageUpload = async (images, setEventData) => {
+  try {
+    if (!images || images.length === 0) {
+      console.error('Tidak ada gambar yang dipilih untuk diunggah');
+      return;
+    }
+
+    const imageFile = images[0];
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    const response = await axios.post('http://localhost:4000/upload', formData);
+    const imageLink = response.data.link;
+
+    // Gunakan imageLink di sini jika diperlukan
+    console.log('Link gambar:', imageLink);
+
+    // Perbarui state dengan tautan gambar
+    setEventData((prevData) => ({ ...prevData, image: imageLink }));
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+};
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData((prevData) => ({ ...prevData, [name]: value }));
@@ -40,9 +71,10 @@ function BuatEvent() {
 
 
   // Fungsi untuk menangani pengunggahan gambar
-  const handleImageUpload = (image) => {
-    setEventData((prevData) => ({ ...prevData, image: image }));
-  };
+  // const handleImageUpload = (image) => {
+  //   setEventData((prevData) => ({ ...prevData, image: image }));
+  // };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +95,12 @@ function BuatEvent() {
         price: eventData.price || 0,
         stock: eventData.stock || 0,
       };
-  
+      
+
+      await handleImageUpload(eventData.image, setEventData);
+
+    // Once the image is uploaded, proceed with form submission
+
       // Kirim permintaan ke server menggunakan Axios
       const response = await axios.post('http://localhost:4000/events', {
         ...dataToSend,
@@ -74,6 +111,8 @@ function BuatEvent() {
       // Tampilkan respons dari server
       console.log(response.data);
   
+
+
       // Reset form setelah berhasil membuat event
       setEventData({
         name: '',
@@ -112,7 +151,7 @@ function BuatEvent() {
     <div className='container'>
       <div className="row">
         <div className="col-sm-5">
-          <FileUpload onUpload={handleImageUpload} />
+        <FileUpload onUpload={(images) => handleImageUpload(images, setEventData)} />
         </div>
         <div className="col-sm-7">
           <form onSubmit={handleSubmit}>

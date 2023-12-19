@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { MdCloudUpload, MdDelete } from 'react-icons/md';
+import PropTypes from 'prop-types'; // Import PropTypes for prop types validation
 import './uploader.scss';
 
-function FileUpload() {
+function FileUpload({ onUpload }) {
   const [images, setImages] = useState([]);
   const [fileNames, setFileNames] = useState([]);
 
@@ -10,6 +11,9 @@ function FileUpload() {
     const selectedImages = Array.from(files).map((file) => URL.createObjectURL(file));
     setImages((prevImages) => [...prevImages, ...selectedImages]);
     setFileNames((prevFileNames) => [...prevFileNames, ...Array.from(files).map((file) => file.name)]);
+    
+    // Call the onUpload function with the selected images
+    onUpload(files);
   };
 
   const deleteImage = (index) => {
@@ -21,22 +25,22 @@ function FileUpload() {
     <div>
       <main>
         <form action="">
-        <label htmlFor="file-upload" className="upload-button">
-          <input
-            id="file-upload"
-            type="file"
-            accept='image/*'
-            multiple
-            hidden
-            onChange={handleImageChange}
-          />
-          <MdCloudUpload color='#1475cf' size={60} />
-          <p>Browse Files to Upload</p>
-        </label>
+          <label htmlFor="file-upload" className="upload-button">
+            <input
+              id="file-upload"
+              type="file"
+              accept='image/*'
+              multiple
+              hidden
+              onChange={handleImageChange}
+            />
+            <MdCloudUpload color='#1475cf' size={60} />
+            <p>Browse Files to Upload</p>
+          </label>
         </form>
       </main>
       <section>
-      <div className="image-preview">
+        <div className="image-preview">
           {images.length > 0 ? (
             images.map((image, index) => (
               <div key={index} className="image-container">
@@ -52,10 +56,13 @@ function FileUpload() {
             </div>
           )}
         </div>
-        
       </section>
     </div>
   );
 }
+
+FileUpload.propTypes = {
+  onUpload: PropTypes.func.isRequired,
+};
 
 export default FileUpload;
