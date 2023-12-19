@@ -14,7 +14,7 @@ function SearchResults({ events }) {
         {/* Pastikan events tidak undefined atau null sebelum melakukan pemetaan */}
         {events &&
           events.map((event) => (
-            <div key={event.id}>
+            <div key={event.eventID}>
               <h3>{event.name}</h3>
               <p>{event.description}</p>
               {/* Tambahkan elemen lain sesuai kebutuhan */}
