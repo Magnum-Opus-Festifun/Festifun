@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CardComponent = ({ image, title, price, sourceLink }) => (
+const CardComponent = ({ image, title, price = 0, sourceLink }) => (
     <div className="card">
       <img src={image} className="card-img-top" alt={title} />
       <div className="card-body">
