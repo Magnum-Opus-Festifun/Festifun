@@ -35,7 +35,7 @@ function TiketkuList(props) {
         </div>
         <div className="button-container">
         <Link to="/unduh">
-          <button className="buy-button">Uduh Sekarang</button>
+          <button className="buy-button">Unduh Sekarang</button>
         </Link>
         </div>
       </div>

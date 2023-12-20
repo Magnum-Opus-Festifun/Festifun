@@ -47,9 +47,9 @@ function Login() {
       // Redirect ke halaman sesuai peran
       const userRole = response.data.data.role;
       if (userRole === 'user') {
-        navigate('/user-page');
+        navigate('/');
       } else if (userRole === 'eo') {
-        navigate('/eo-page');
+        navigate('/dasboard');
       }
     } catch (error) {
       if (error.response) {

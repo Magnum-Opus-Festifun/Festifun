@@ -5,7 +5,7 @@ import axios from 'axios';
 function FestivalList() {
   const [events, setEvents] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:4000/events/2')
+    axios.get('http://localhost:4000/events/1')
       .then((res) => {
         const sortedData = res.data.data.sort((a, b) => b.eventID - a.eventID);
         setEvents(sortedData.slice(0, 4));
