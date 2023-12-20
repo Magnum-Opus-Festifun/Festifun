@@ -4,7 +4,7 @@ import React from 'react';
 function SearchResults({ events }) {
   // Fungsi untuk menampilkan pesan jika tidak ada hasil pencarian
   const renderNoResults = () => {
-    return <div>Tidak ada hasil yang ditemukan</div>;
+    // return <div>Tidak ada hasil yang ditemukan</div>;
   };
 
   // Fungsi untuk menampilkan hasil pencarian

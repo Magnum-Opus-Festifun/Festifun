@@ -14,7 +14,7 @@ const Footer = () => {
           <img src="https://github.com/Magnum-Opus-Festifun/punyabima/blob/main/aset/logo%20biru.png?raw=true" alt="Logo" style={{ width: '85%' }} />
         </div>
         <hr />
-        <p className='text-justify'>EventScapeID adalah platform terkemuka yang menghadirkan informasi lengkap tentang beragam acara budaya, seni, musik, dan kegiatan menarik di Yogyakarta. Kami berkomitmen untuk menghubungkan pencari kegiatan dengan acara-acara yang memikat, menjelajahi kekayaan budaya Yogyakarta, dan memberikan pengalaman tak terlupakan kepada komunitas kami.</p>
+        <p className='text-justify'>Festifun adalah platform terkemuka yang menghadirkan informasi lengkap tentang beragam acara budaya, seni, musik, dan kegiatan menarik di Yogyakarta. Kami berkomitmen untuk menghubungkan pencari kegiatan dengan acara-acara yang memikat, menjelajahi kekayaan budaya Yogyakarta, dan memberikan pengalaman tak terlupakan kepada komunitas kami.</p>
         <div className="social-media-icons">
           <Facebook size={24} color="white" />
           <Twitter size={24} color="white" />
